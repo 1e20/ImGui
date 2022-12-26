@@ -1,5 +1,3 @@
--- Better Drawing Library by Require <3
-
 --[[
     How to use: 
 
@@ -73,27 +71,20 @@ end;
 
 function Brush.Memory:Allocate(Object, Class, Properties)
     if (not Object) then return false end;
-    local Buffer = self.Pool[Object]; 
 
-    if (not Buffer) then 
-        Buffer = self:CreateBuffer(Object); 
-    end; 
+    local Buffer = ( self.Pool[Object] or self:CreateBuffer(Object) );
+    local Drawing = ( Buffer.Drawings[Class][1] or DRAW(Class) );
 
-    local Drawing = Buffer.Drawings[Class][1];
-
-    if (not Drawing) then 
-        Drawing = DRAW(Class); 
-        table.insert(Buffer.Queue[Class], Drawing);
-    else 
+    if (Drawing) then
         table.remove(Buffer.Drawings[Class], 1);
-        table.insert(Buffer.Queue[Class], Drawing); 
-    end; 
+    end;
+
+    table.insert(Buffer.Queue[Class], Drawing);
 
     for p, v in next, Properties do 
         Drawing[p] = v;
-    end; 
-
-end; 
+    end;
+end;
 
 function Brush:EndDraw()
     for i, m in next, self.Memory.Pool do 
