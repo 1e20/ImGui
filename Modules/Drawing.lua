@@ -84,6 +84,8 @@ function Brush.Memory:Allocate(Object, Class, Properties)
     for p, v in next, Properties do 
         Drawing[p] = v;
     end;
+
+    return Drawing;
 end;
 
 function Brush:EndDraw()
@@ -106,7 +108,7 @@ end;
 
 function Brush:Draw(Object, Class, Properties)
     assert((Class and Properties), "[Brush-Draw] Missing arguments");
-    self.Memory:Allocate(Object, Class, Properties);
+    return self.Memory:Allocate(Object, Class, Properties);
 end; 
 
 return Brush;
